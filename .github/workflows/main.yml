@@ -1,0 +1,34 @@
+name: Heroku Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  build:
+    name: Deploy New Heroku App
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v2
+      - name: Identify branch name
+        id: vars
+        run: 'echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}'
+      - name: Deploy app to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }}"
+          heroku_email: "craig@privacydynamics.io"
+        env:
+          HD_PVCY_CHALLENGE_SERVICE_DOMAIN: ${{secrets.PVCY_CHALLENGE_SERVICE_DOMAIN}}
+          HD_USER_NAME: ${{ github.actor }}
+          HD_BRANCH_NAME: ${{ steps.vars.outputs.short_ref }}
+          HD_GITHUB_RUN_ID: ${{ github.run_id }}
+          HD_GH_PA_TOKEN: ${{secrets.GH_PA_TOKEN}}
+      - name: Run Submitted Scoring Module
+        run: "heroku run worker --app pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }}"
+      - name: Destory Heroku App
+        run: "heroku apps:destroy pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }} --confirm pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }}"
