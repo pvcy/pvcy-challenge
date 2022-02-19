@@ -1,8 +1,5 @@
-import logging
-
-
 def main():
-    logging.info("Start main()")
+    print("Start main()")
 
 
 if __name__ == "__main__":
