@@ -1,4 +1,4 @@
-name: Deploy
+name: Heroku Deploy
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    name: Deploy New Heroku App
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
