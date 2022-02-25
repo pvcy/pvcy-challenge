@@ -16,13 +16,13 @@ jobs:
       - name: Set output
         id: vars
         run: 'echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}'
-      - name: Deploy App to Heroku
+      - name: Deploy app to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }}"
           heroku_email: "craig@bucketduck.com"
-      - name: Heroku Run
+      - name: Run program
         uses: michcio1234/heroku-run@0.1.1
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
