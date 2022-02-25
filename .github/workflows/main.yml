@@ -11,12 +11,21 @@ jobs:
     name: Deploy New Heroku App
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Check out branch
+        uses: actions/checkout@v2
       - name: Set output
         id: vars
         run: 'echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}'
-      - uses: akhileshns/heroku-deploy@v3.12.12
+      - name: Deploy App to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }}"
           heroku_email: "craig@bucketduck.com"
+      - name: Heroku Run
+        uses: michcio1234/heroku-run@0.1.1
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_email: "craig@bucketduck.com"
+          heroku_app_name: "pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }}"
+          command: worker
