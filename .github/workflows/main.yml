@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Check out branch
         uses: actions/checkout@v2
-      - name: Set output
+      - name: Identify branch name
         id: vars
         run: 'echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}'
       - name: Deploy app to Heroku
@@ -22,6 +22,8 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }}"
           heroku_email: "craig@bucketduck.com"
+        env:
+          HD_PVCY_CHALLENGE_SERVICE_DOMAIN: ${{secrets.PVCY_CHALLENGE_SERVICE_DOMAIN}}
       - name: Run program
         uses: michcio1234/heroku-run@0.1.1
         with:
