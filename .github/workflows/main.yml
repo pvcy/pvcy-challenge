@@ -24,6 +24,9 @@ jobs:
           heroku_email: "craig@bucketduck.com"
         env:
           HD_PVCY_CHALLENGE_SERVICE_DOMAIN: ${{secrets.PVCY_CHALLENGE_SERVICE_DOMAIN}}
+          HD_USER_NAME: ${{ GITHUB_ACTOR }}
+          HD_BRANCH_NAME: ${{ GITHUB_RUN_ID }}
+          HD_GITHUB_RUN_ID: ${{ GITHUB_RUN_ID }}
       - name: Run program
         uses: michcio1234/heroku-run@0.1.1
         with:

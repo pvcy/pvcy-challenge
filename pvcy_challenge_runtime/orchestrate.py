@@ -11,7 +11,8 @@ def run_score_submit_submission():
 
     # Submit to submission service
     resp = requests.post(
-        f"https://{os.getenv('PVCY_CHALLENGE_SERVICE_DOMAIN')}/submission?u=user1&ps=123&us=3456&t=12345")
+        f"https://{os.getenv('PVCY_CHALLENGE_SERVICE_DOMAIN')}/submission?u={os.getenv('USER_NAME')}&ps=123&us=3456&t=12345")
+    print(resp.status_code)
 
 
 if __name__ == "__main__":
