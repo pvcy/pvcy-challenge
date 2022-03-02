@@ -36,4 +36,4 @@ jobs:
           heroku_app_name: "pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }}"
           command: worker
       - name: Destory Heroku App
-        run:  heroku apps:destroy pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref } --confirm pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }
+        run: "heroku apps:destroy pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref } --confirm pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }"
