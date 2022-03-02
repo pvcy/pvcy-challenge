@@ -25,7 +25,7 @@ def run_score_submit_submission():
 
     # Submit to submission service
     resp = requests.post(
-        f"https://{os.getenv('PVCY_CHALLENGE_SERVICE_DOMAIN')}/submission?u={os.getenv('USER_NAME', 'craig')}&ps={privacy_score}&us={distortion_score}&t={time_in_millis}")
+        f"https://{os.getenv('PVCY_CHALLENGE_SERVICE_DOMAIN')}/submission?u={os.getenv('USER_NAME', 'testing')}&ps={privacy_score}&us={distortion_score}&t={time_in_millis}")
     print(resp.status_code)
 
 
