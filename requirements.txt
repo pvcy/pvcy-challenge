@@ -1,4 +1,11 @@
+pytest==7.0.1
 timing==0.4.0
 python-dotenv==0.19.2
-requests==2.27.1
 Flask==2.0.3
+numpy~=1.22.3
+pandas~=1.4.1
+fastkde~=1.0.19
+requests
+
+# Add any additional dependecies here.  Note that all outbound HTTP calls are not permitted and will be blocked so
+# choose dependencies accordingly.
