@@ -8,6 +8,7 @@ def main():
     The main implementation of your anonymization implementation.
     :return: A valid pandas DataFrame with your anonymized data
     '''
+    print("Running main")
 
     # This is the data you must anonymize.
     data_frame = read_csv(
