@@ -1,11 +1,9 @@
 name: Heroku Deploy
 
 on:
-  push:
-    branches:
-      - master
-      - main
-      - second
+  release:
+    types: [ published ]
+
 
 jobs:
   build:
