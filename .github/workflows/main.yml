@@ -33,7 +33,7 @@ jobs:
         uses: michcio1234/heroku-run@0.1.1
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_email: "craig@bucketduck.com"
+          heroku_email: "craig@privacydynamics.io"
           heroku_app_name: "pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }}"
           command: worker
       - name: Destory Heroku App
