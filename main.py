@@ -1,6 +1,24 @@
 import os
 
-from pandas import read_csv
+from pandas import read_csv, DataFrame, Series
+
+
+def anonymize(df: DataFrame, qids, suppress_percent=0.05):
+    """
+    Simplistic anonymizer.
+    """
+    # Randonly shuffle column values
+    anon_df = df.copy()
+    for colname in qids:
+        anon_df[colname] = Series(
+            anon_df[colname].sample(len(anon_df), replace=True).values,
+            index=anon_df.index
+        )
+    # Suppress arbitrary percent of rows at random
+    return anon_df.drop(
+        labels=anon_df.sample(frac=suppress_percent).index,
+        axis=0
+    )
 
 
 def main():
