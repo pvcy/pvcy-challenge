@@ -6,12 +6,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 ## How to Play
 1. Checkout this repository and initialize your local development environment by running `pip install -r requirements.txt`
-2. Implement your anonymization on the dataset found in `data/2018_Central_Park_Squirrel_Census_-_Squirrel_Data.csv` within `main()` function in `main.py`.
-3. Submit a new branch to this branch with your implementation.  We'll review and score your submission and post it on the dashboard at the Privacy Dynamics booth.
+   1. Implement your anonymization algorithm within `anonymize()` function in `main.py`.  Please note that you must not change either the function signature of `anonymize()` not the return type of a pandas `DataFrame`.
+2. Submit a new branch to this branch with your implementation.  We'll review and score your submission and post it on the dashboard at the Privacy Dynamics booth.
 
 ## Rules
 1. Submit as many entries as you wish. If you wish to submit more than once, please submit a second branch.
-2. Your main implementation must be in `main()` in `main.py`.  Feel free to introduce any additional files or libraries in `requirements.txt` as you see fit.
+2. Your main implementation must be in `anonymize()` in `main.py`.  Feel free to introduce any additional files or libraries in `requirements.txt` as you see fit.
 3. We ask that you don't use any outbound HTTP calls.  Please don't use any HTTP client libraries like `urllib` or python `requests`.
 4. Other adding your own libraries, you should only edit `main.py` and `requirements.txt`. If any edits beyond these two files are made, your submission will be disqualified.
 
