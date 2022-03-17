@@ -21,8 +21,9 @@ def run_score_submit_submission():
 
     directory = f'{os.path.dirname(os.path.abspath(__file__))}/../data'
     files = Path(directory).glob('*.csv')
+    print("Running orchestrate...")
     for file in files:
-        print(file)
+        print(f"Processing dataset from ${file}")
 
         # Iniital DataFrame
         df_before = read_csv(file)

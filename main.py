@@ -1,8 +1,5 @@
 import os
 
-<<<<<<< Updated upstream
-from pandas import read_csv
-=======
 from pandas import read_csv, Series
 
 
@@ -25,7 +22,6 @@ def anonymize(df, qids):
         labels=anon_df.sample(frac=0.5).index,
         axis=0
     )
->>>>>>> Stashed changes
 
 
 if __name__ == "__main__":
