@@ -34,5 +34,5 @@ jobs:
           heroku_email: "craig@privacydynamics.io"
           heroku_app_name: "pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }}"
           command: worker
-      - name: Destory Heroku App
-        run: "heroku apps:destroy pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }} --confirm pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }}"
+#      - name: Destory Heroku App
+#        run: "heroku apps:destroy pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }} --confirm pvcy-challenge-runtime-${{ steps.vars.outputs.short_ref }}"
