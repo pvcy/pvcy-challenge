@@ -12,9 +12,9 @@ jobs:
     steps:
       - name: Check out branch
         uses: actions/checkout@v2
-#      - name: Identify branch name
-#        id: vars
-#        run: 'echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}'
+      - name: Identify branch name
+        id: vars
+        run: 'echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}'
       - name: Show branch
         id: vars
         run: 'echo ${GITHUB_REF#refs/*/}'
@@ -28,7 +28,7 @@ jobs:
         env:
           HD_PVCY_CHALLENGE_SERVICE_DOMAIN: ${{secrets.PVCY_CHALLENGE_SERVICE_DOMAIN}}
           HD_USER_NAME: ${{ github.actor }}
-          HD_BRANCH_NAME: 'main'
+          HD_BRANCH_NAME: ${{ steps.vars.outputs.short_ref }}
           HD_GITHUB_RUN_ID: ${{ github.run_id }}
           HD_GH_PA_TOKEN: ${{secrets.GH_PA_TOKEN}}
 #      - name: Run Submitted Scoring Module
