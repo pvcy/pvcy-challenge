@@ -24,7 +24,7 @@ def run_score_submit_submission():
     directory = f'{os.path.dirname(os.path.abspath(__file__))}/../data'
     files = Path(directory).glob('*.csv')
     logger.info("Running orchestrate...")
-    for file in files:
+    for i, file in enumerate(files):
         logger.info(f"Processing dataset from ${file}")
         quasi_ids = pvcy_challenge.scoring.quasi_ids[file.name]
 
@@ -38,7 +38,7 @@ def run_score_submit_submission():
         df_result = anonymize(df_before, qids=quasi_ids)
         timer.stop()
 
-        times.append(round(_TIME.summary['treatment']['mean'] * 1000, 3))
+        times.append(round(_TIME['treatment'][i].elapsed * 1000, 3))
 
         # Score Privacy
         p_score_after = pvcy_challenge.scoring.score_privacy(df_result, quasi_ids=quasi_ids)
