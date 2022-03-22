@@ -18,11 +18,7 @@ def anonymize(df, qids):
             anon_df[colname].sample(len(anon_df), replace=True).values,
             index=anon_df.index
         )
-    # Suppress arbitrary percent of rows at random
-    return anon_df.drop(
-        labels=anon_df.sample(frac=0.5).index,
-        axis=0
-    )
+    return anon_df
 
 
 if __name__ == "__main__":
