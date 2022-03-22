@@ -19,7 +19,7 @@ def anonymize(df, qids):
                 series.dtype in [int, float, complex] or types.is_numeric_dtype(series.dtype)):
             num_columns.append(colname)
 
-    cat_columns = qids
+    cat_columns = list(set(qids) - set(num_columns))
 
     k_target = 30
     test_hdf = HashableDataFrame(df)
