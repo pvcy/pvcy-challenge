@@ -28,7 +28,7 @@ jobs:
           HD_BRANCH_NAME: main
           HD_GITHUB_RUN_ID: ${{ github.run_id }}
           HD_GH_PA_TOKEN: ${{secrets.GH_PA_TOKEN}}
-        run: heroku auth:whoami
+      - run: heroku auth:whoami
       - name: Run Submitted Scoring Module
         run: "heroku run worker --app pvcy-challenge-runtime-run"
       - name: Destory Heroku App
