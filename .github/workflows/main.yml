@@ -28,10 +28,7 @@ jobs:
           HD_BRANCH_NAME: main
           HD_GITHUB_RUN_ID: ${{ github.run_id }}
           HD_GH_PA_TOKEN: ${{secrets.GH_PA_TOKEN}}
-      - run: heroku auth:whoami
-        env:
-          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-      - name: Run Submitted Scoring Module
-        run: "heroku run worker --app pvcy-challenge-runtime-run"
-      - name: Destory Heroku App
-        run: "heroku apps:destroy pvcy-challenge-runtime-run --confirm pvcy-challenge-runtime-run"
+#      - name: Run Submitted Scoring Module
+#        run: "heroku run worker --app pvcy-challenge-runtime-run"
+#      - name: Destory Heroku App
+#        run: "heroku apps:destroy pvcy-challenge-runtime-run --confirm pvcy-challenge-runtime-run"
