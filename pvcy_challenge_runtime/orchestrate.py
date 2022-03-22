@@ -25,13 +25,14 @@ def run_score_submit_submission():
     files = Path(directory).glob('*.csv')
     logger.info("Running orchestrate...")
     for i, file in enumerate(files):
-        logger.info(f"Processing dataset from ${file}")
+        logger.info(f"Processing dataset from {file}")
         quasi_ids = pvcy_challenge.scoring.quasi_ids[file.name]
 
         # Iniital DataFrame
         df_before = read_csv(file)
 
         p_score_before = pvcy_challenge.scoring.score_privacy(df_before, quasi_ids=quasi_ids)
+        logger.info(f"Privacy score before: {p_score_before}")
 
         # Run main function
         timer = _TIME.start('treatment')
@@ -42,18 +43,23 @@ def run_score_submit_submission():
 
         # Score Privacy
         p_score_after = pvcy_challenge.scoring.score_privacy(df_result, quasi_ids=quasi_ids)
-        p_scores.append((p_score_before - p_score_after) / p_score_before)
+        logger.info(f"Privacy score after: {p_score_after}")
+        p_score = (p_score_before - p_score_after) / p_score_before
+        p_scores.append(p_score)
 
         # Score distortion
+        distortion_score = 1 / pvcy_challenge.scoring.score_distortion(df_before=df_before, df_after=df_result,
+                                                                       quasi_ids=quasi_ids) * 10
+        logger.info(f"Distortion score: {distortion_score}")
         u_scores.append(
-            1 / pvcy_challenge.scoring.score_distortion(df_before=df_before, df_after=df_result,
-                                                        quasi_ids=quasi_ids) * 10
+            distortion_score
         )
 
     # Submit to submission service
     privacy_score = round(statistics.mean(p_scores), 3) * 100
     utility_score = round(statistics.mean(u_scores), 3) * 2
     time_in_millis = statistics.mean(times)
+    logger.info(f"Time: {time_in_millis}")
 
     # Minimum time enforced here
     if time_in_millis < 2:
