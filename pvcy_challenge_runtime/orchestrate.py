@@ -48,8 +48,8 @@ def run_score_submit_submission():
         p_scores.append(p_score)
 
         # Score distortion
-        distortion_score = 1 - pvcy_challenge.scoring.score_distortion(df_before=df_before, df_after=df_result,
-                                                                       quasi_ids=quasi_ids) * 100
+        distortion_score = (1 - pvcy_challenge.scoring.score_distortion(df_before=df_before, df_after=df_result,
+                                                                       quasi_ids=quasi_ids)) * 100
         logger.info(f"Distortion score: {distortion_score}")
         u_scores.append(
             distortion_score
