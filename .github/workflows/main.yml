@@ -23,7 +23,7 @@ jobs:
           heroku_email: "craig@privacydynamics.io"
         env:
           HD_PVCY_CHALLENGE_SERVICE_DOMAIN: ${{secrets.PVCY_CHALLENGE_SERVICE_DOMAIN}}
-          HD_USER_NAME: ${{ github.actor }}
+          HD_USER_NAME: ${{ github.event.pull_request.user.login }}
           HD_BRANCH_NAME: ${{ steps.vars.outputs.short_ref }}
           HD_GITHUB_RUN_ID: ${{ github.run_id }}
           HD_GH_PA_TOKEN: ${{secrets.GH_PA_TOKEN}}
