@@ -19,8 +19,9 @@ The winner will take home the world's most state-of-the art home espresso machin
 
 ### How to Play
 1. Fork this repository and clone it to your hard drive.
-    <img width="412" alt="fork" src="https://user-images.githubusercontent.com/1315884/159560866-da5b3786-5a75-452b-aae6-76ff0378f787.png">
-    <img width="417" alt="clone" src="https://user-images.githubusercontent.com/1315884/159560884-fa9f082f-f54a-42cc-b8b5-ffcc24c4860a.png">
+    1. <img width="412" alt="fork" src="https://user-images.githubusercontent.com/1315884/159560866-da5b3786-5a75-452b-aae6-76ff0378f787.png">
+    2. <img width="417" alt="clone" src="https://user-images.githubusercontent.com/1315884/159560884-fa9f082f-f54a-42cc-b8b5-ffcc24c4860a.png">
+   
 2. Implement your anonymization algorithm within the `anonymize()` function in `main.py`. The function must accept a Pandas DataFrame and a list of quasi-identifiers (QIDs) and return a DataFrame.
 3. The list of QIDs will map to column names in the input DataFrame. Every combination of QIDs in the dataset forms an equivalence class, and the fewer records there are in each equivalence class, the higher the risk that an individual can be linked to an external dataset. Make changes to column QID values to increase the size of equivalence classes. More records belonging to larger equivalence classes will result in a higher privacy score, but as more cells are distorted, the utility score will decrease. The objective is to optimize privacy and utility.
 4. You may also choose to suppress rows as part of your anonymization strategy. It is valid to replace suppressed values with a mask or drop rows entirely from the DataFrame.
@@ -28,9 +29,9 @@ The winner will take home the world's most state-of-the art home espresso machin
 6. Do not drop any columns. Missing output columns will cause the Test Bench to fail.
 7. Test datasets will not contain any direct identifiers (DIDs).
 8. We've included one of the Test Bench datasets in the repo for you to use in testing.
-9. After completing your anonymizer, push your implementation to your fork and open a PR into our repo. 
-   <img width="426" alt="open pr" src="https://user-images.githubusercontent.com/1315884/159560895-44892fe8-c31e-4733-a843-5f4f3ff3bb84.png">
-   We'll review your submission, and if it's approved it will run against the Privacy Challenge Test Bench.
+9. After completing your anonymizer, push your implementation to your fork and open a PR into our repo.
+   1. <img width="426" alt="open pr" src="https://user-images.githubusercontent.com/1315884/159560895-44892fe8-c31e-4733-a843-5f4f3ff3bb84.png"><br/>
+   2. We'll review your submission, and if it's approved it will run against the Privacy Challenge Test Bench.
 10. Results will be posted on the Privacy Challenge Dshboard at the Privacy Dynamics booth.
 11. Come talk to us at the booth!
 
