@@ -1,5 +1,11 @@
 pytest==7.0.1
-pandas==1.4.1
+sklearn==0.0
+category-encoders==2.2.2
+numpy
+pandas
+annoy==1.16.3
+fastkde~=1.0.19
+
 
 # Add any additional dependecies here.  Note that all outbound HTTP calls are not permitted and will be blocked so
 # choose dependencies accordingly.

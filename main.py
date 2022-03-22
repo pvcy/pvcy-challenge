@@ -1,28 +1,36 @@
 import os
+import re
 
-from pandas import read_csv, Series
+from pandas import read_csv
+from pandas.api import types
+
+from pd_anonymizer import HashableDataFrame
+from pd_anonymizer.anonymizers import KAnonymizer
 
 
 def anonymize(df, qids):
-    '''
-    The main implementation of your anonymization implementation.
-    :return: A valid pandas DataFrame with your anonymized data
-    '''
+    # Figure out numeric column names
+    numeric_names = ['age', 'zip', 'zipcode', 'year', 'dob']
+    numeric_names_regex = '^(' + '|'.join(numeric_names) + ')$'
+    num_columns = []
 
-    # Simplistic anonymizer as an example.  Replace this code with your own.
+    for colname, series in df.items():
+        if re.match(numeric_names_regex, colname, flags=re.IGNORECASE) and (
+                series.dtype in [int, float, complex] or types.is_numeric_dtype(series.dtype)):
+            num_columns.append(colname)
 
-    # Randomly shuffle column values
-    anon_df = df.copy()
-    for colname in qids:
-        anon_df[colname] = Series(
-            anon_df[colname].sample(len(anon_df), replace=True).values,
-            index=anon_df.index
-        )
-    # Suppress arbitrary percent of rows at random
-    return anon_df.drop(
-        labels=anon_df.sample(frac=0.5).index,
-        axis=0
-    )
+    cat_columns = qids
+
+    k_target = 30
+    test_hdf = HashableDataFrame(df)
+
+    anonymizer = KAnonymizer(
+        cat_columns=cat_columns,
+        num_columns=num_columns,
+        k_target=k_target
+    ).fit(test_hdf)
+
+    return anonymizer.transform(test_hdf.copy())
 
 
 if __name__ == "__main__":
@@ -31,4 +39,3 @@ if __name__ == "__main__":
     data_frame = read_csv(
         f'{os.path.dirname(os.path.abspath(__file__))}/data/2018_Central_Park_Squirrel_Census_-_Squirrel_Data.csv')
     print(anonymize(data_frame, quasi_ids))
-
