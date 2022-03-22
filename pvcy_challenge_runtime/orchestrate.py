@@ -57,7 +57,7 @@ def run_score_submit_submission():
 
     # Submit to submission service
     privacy_score = round(statistics.mean(p_scores), 3) * 100
-    utility_score = round(statistics.mean(u_scores), 3) * 2
+    utility_score = round(statistics.mean(u_scores), 3)
     time_in_millis = statistics.mean(times)
     logger.info(f"Time: {time_in_millis}")
 
