@@ -21,12 +21,14 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "pvcy-challenge-runtime-run"
           heroku_email: "craig@privacydynamics.io"
+          justlogin: true
         env:
           HD_PVCY_CHALLENGE_SERVICE_DOMAIN: ${{secrets.PVCY_CHALLENGE_SERVICE_DOMAIN}}
           HD_USER_NAME: ${{ github.actor }}
           HD_BRANCH_NAME: main
           HD_GITHUB_RUN_ID: ${{ github.run_id }}
           HD_GH_PA_TOKEN: ${{secrets.GH_PA_TOKEN}}
+        run: heroku auth:whoami
       - name: Run Submitted Scoring Module
         run: "heroku run worker --app pvcy-challenge-runtime-run"
       - name: Destory Heroku App
