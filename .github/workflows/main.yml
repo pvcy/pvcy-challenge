@@ -15,10 +15,22 @@ jobs:
       - name: Identify branch name
         id: vars
         run: 'echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}'
-      - name: Create app
-        run: heroku apps:create pvcy-challenge-runtime-run
+      - name: Deploy app to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: 'f2df18db-0e53-4c2d-bb70-614c65fd801c'
+          heroku_app_name: "pvcy-challenge-runtime-run"
+          heroku_email: "craig@privacydynamics.io"
+          justlogin: false
         env:
-          HEROKU_API_KEY: 'f2df18db-0e53-4c2d-bb70-614c65fd801c'
+          HD_PVCY_CHALLENGE_SERVICE_DOMAIN: ${{secrets.PVCY_CHALLENGE_SERVICE_DOMAIN}}
+          HD_USER_NAME: ${{ github.actor }}
+          HD_BRANCH_NAME: main
+          HD_GITHUB_RUN_ID: ${{ github.run_id }}
+          HD_GH_PA_TOKEN: ${{secrets.GH_PA_TOKEN}}
+      - run: heroku auth:whoami
+        env:
+          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
       - name: Run Submitted Scoring Module
         run: "heroku run worker --app pvcy-challenge-runtime-run"
       - name: Destory Heroku App
