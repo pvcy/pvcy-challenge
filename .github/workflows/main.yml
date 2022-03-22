@@ -16,7 +16,7 @@ jobs:
         id: vars
         run: 'echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}'
       - name: Create app
-        run: heroku app create pvcy-challenge-runtime-run
+        run: heroku apps:create pvcy-challenge-runtime-run
         env:
           HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
       - name: Run Submitted Scoring Module
