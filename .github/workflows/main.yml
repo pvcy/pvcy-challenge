@@ -16,7 +16,6 @@ jobs:
         id: vars
         run: 'echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}'
       - name: Show branch
-        id: vars
         run: 'echo ${GITHUB_REF#refs/*/}'
       - name: Deploy app to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
