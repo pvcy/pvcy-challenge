@@ -12,9 +12,12 @@ jobs:
     steps:
       - name: Check out branch
         uses: actions/checkout@v2
-      - name: Identify branch name
+#      - name: Identify branch name
+#        id: vars
+#        run: 'echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}'
+      - name: Show branch
         id: vars
-        run: 'echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}'
+        run: 'echo ${GITHUB_REF#refs/*/}'
       - name: Deploy app to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
@@ -24,10 +27,10 @@ jobs:
         env:
           HD_PVCY_CHALLENGE_SERVICE_DOMAIN: ${{secrets.PVCY_CHALLENGE_SERVICE_DOMAIN}}
           HD_USER_NAME: ${{ github.actor }}
-          HD_BRANCH_NAME: ${{ steps.vars.outputs.short_ref }}
+          HD_BRANCH_NAME: 'main'
           HD_GITHUB_RUN_ID: ${{ github.run_id }}
           HD_GH_PA_TOKEN: ${{secrets.GH_PA_TOKEN}}
-      - name: Run Submitted Scoring Module
-        run: "heroku run worker --app pvcy-challenge-runtime-run"
-      - name: Destory Heroku App
-        run: "heroku apps:destroy pvcy-challenge-runtime-run --confirm pvcy-challenge-runtime-run"
+#      - name: Run Submitted Scoring Module
+#        run: "heroku run worker --app pvcy-challenge-runtime-run"
+#      - name: Destory Heroku App
+#        run: "heroku apps:destroy pvcy-challenge-runtime-run --confirm pvcy-challenge-runtime-run"
