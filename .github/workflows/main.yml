@@ -19,7 +19,7 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "pvcy-challenge-runtime-${{ github.run_id }}"
+          heroku_app_name: "pvcy-challenge-${{ github.run_id }}"
           heroku_email: "craig@privacydynamics.io"
         env:
           HD_PVCY_CHALLENGE_SERVICE_DOMAIN: ${{secrets.PVCY_CHALLENGE_SERVICE_DOMAIN}}
@@ -28,6 +28,6 @@ jobs:
           HD_GITHUB_RUN_ID: ${{ github.run_id }}
           HD_GH_PA_TOKEN: ${{secrets.GH_PA_TOKEN}}
       - name: Run Submitted Scoring Module
-        run: "heroku run worker --app pvcy-challenge-runtime-${{ github.run_id }}"
+        run: "heroku run worker --app pvcy-challenge-${{ github.run_id }}"
       - name: Destory Heroku App
-        run: "heroku apps:destroy pvcy-challenge-runtime-${{ github.run_id }} --confirm pvcy-challenge-runtime-${{ github.run_id }}"
+        run: "heroku apps:destroy pvcy-challenge-${{ github.run_id }} --confirm pvcy-challenge-${{ github.run_id }}"
