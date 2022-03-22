@@ -18,7 +18,7 @@ jobs:
       - name: Create app
         run: heroku apps:create pvcy-challenge-runtime-run
         env:
-          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+          HEROKU_API_KEY: 'f2df18db-0e53-4c2d-bb70-614c65fd801c'
       - name: Run Submitted Scoring Module
         run: "heroku run worker --app pvcy-challenge-runtime-run"
       - name: Destory Heroku App
