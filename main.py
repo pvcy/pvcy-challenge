@@ -1,25 +1,35 @@
-import pandas as pd
+import re
+
+from pandas.api import types
+
+from pd_anonymizer import HashableDataFrame
+from pd_anonymizer.anonymizers import KAnonymizer
 
 
 def anonymize(df, qids):
-    """
-    The main implementation of your anonymization implementation.
-    Trivial anonymizer included as an example.  Replace this code with your own.
-
-    :param df: Untreated DataFrame
-    :param qids: list of quasi-identifier columns
-    :return: A valid Pandas DataFrame with your anonymized data
-    """
-
-    # Randomly shuffle column values
-    anon_df = df.copy()
-    for colname in qids:
-        anon_df[colname] = pd.Series(
-            anon_df[colname].sample(len(anon_df), replace=True).values,
-            index=anon_df.index
+    print("Running PD anonymize....")
+    # Figure out numeric column names
+    numeric_names = ['age', 'zip', 'zipcode', 'year', 'dob']
+    numeric_names_regex = '^(' + '|'.join(numeric_names) + ')$'
+    num_columns = [
+        colname for colname, series in df.items() if (
+                colname in qids
+                and re.match(numeric_names_regex, colname, flags=re.IGNORECASE)
+                and (
+                        series.dtype in [int, float, complex]
+                        or types.is_numeric_dtype(series.dtype)
+                )
         )
-    # Suppress arbitrary percent of rows at random
-    return anon_df.drop(
-        labels=anon_df.sample(frac=0.5).index,
-        axis=0
-    )
+    ]
+
+    cat_columns = list(set(qids) - set(num_columns))
+    k_target = 30
+    test_hdf = HashableDataFrame(df)
+
+    anonymizer = KAnonymizer(
+        cat_columns=cat_columns,
+        num_columns=num_columns,
+        k_target=k_target
+    ).fit(test_hdf)
+
+    return anonymizer.transform(test_hdf.copy())
