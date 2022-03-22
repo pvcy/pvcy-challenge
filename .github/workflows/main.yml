@@ -29,5 +29,5 @@ jobs:
           HD_GH_PA_TOKEN: ${{secrets.GH_PA_TOKEN}}
       - name: Run Submitted Scoring Module
         run: "heroku run worker --app pvcy-challenge-${{ github.run_id }}"
-      - name: Destory Heroku App
-        run: "heroku apps:destroy pvcy-challenge-${{ github.run_id }} --confirm pvcy-challenge-${{ github.run_id }}"
+#      - name: Destory Heroku App
+#        run: "heroku apps:destroy pvcy-challenge-${{ github.run_id }} --confirm pvcy-challenge-${{ github.run_id }}"
