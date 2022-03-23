@@ -49,7 +49,7 @@ def run_score_submit_submission():
 
         # Score distortion
         distortion_score = (1 - pvcy_challenge.scoring.score_distortion(df_before=df_before, df_after=df_result,
-                                                                       quasi_ids=quasi_ids)) * 100
+                                                                        quasi_ids=quasi_ids)) * 100
         logger.info(f"Distortion score: {distortion_score}")
         u_scores.append(
             distortion_score
@@ -58,7 +58,7 @@ def run_score_submit_submission():
     # Submit to submission service
     privacy_score = round(statistics.mean(p_scores), 3) * 100
     utility_score = round(statistics.mean(u_scores), 3)
-    time_in_millis = statistics.mean(times)
+    time_in_millis = round(statistics.mean(times), 3)
     logger.info(f"Time: {time_in_millis}")
 
     # Minimum time enforced here
