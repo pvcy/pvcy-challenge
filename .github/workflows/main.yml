@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Check out branch
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Identify branch name
         id: vars
         run: 'echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}'
