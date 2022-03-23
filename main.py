@@ -117,7 +117,7 @@ def anonymize(df, qids):
     # df
     # inner_join_df
     for c in list(inner_join_df[quasi_ids_w_wo_cat]):
-        inner_join_df[c] = inner_join_df.groupby(['Clusters'])[c].transform('min')    
+        inner_join_df[c] = inner_join_df.groupby(['Clusters'])[c].transform('min')
 
     new_df = pd.merge(df, inner_join_df, on="id", how="left")
 
@@ -129,7 +129,7 @@ def anonymize(df, qids):
             new_df[c] = new_df[c + '_y'].combine_first(new_df[c + '_x'])
 
     #clean up the columns
-    reduced_df = new_df[fields_list].copy()
+    reduced_df = new_df[all_fields].copy()
 
     d={}
     for c in quasi_ids_cat:
