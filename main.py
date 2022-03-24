@@ -1,8 +1,17 @@
+# had help 
+# from https://towardsdatascience.com/the-k-prototype-as-clustering-algorithm-for-mixed-data-type-categorical-and-numerical-fe7c50538ebb
+# and https://latrobe.libguides.com/sensitivedata/deidentification
+# and https://dev.to/r0f1/a-simple-way-to-anonymize-data-with-python-and-pandas-79g
+# and https://github.com/qiyuangong/Mondrian/blob/master/anonymizer.py
+# and https://sdcpractice.readthedocs.io/en/latest/anon_methods.html
+# and https://medium.com/brillio-data-science/a-brief-overview-of-k-anonymity-using-clustering-in-python-84203012bdea
+
 import pandas as pd
 import numpy as np
 import seaborn as sns
 sns.set()
 from sklearn.cluster import KMeans
+from kmodes.kprototypes import KPrototypes
 
 '''
 Given this part in the prompt:
@@ -59,82 +68,98 @@ def anonymize(df, qids):
     #helpers 
     all_fields = list(df)
 
-    fields_list = list(df)
-    del fields_list[0]
-
-    # fill in nulls: for numeric use the mean, for categorical use unknown label
-    # otherwise grab the mode
-
-    for c in list(df[quasi_ids]):
-        if df[c].dtypes == np.int64:
-            df[c]=df[c].fillna((df[c].mean()))
-        elif df[c].dtypes == object:
-            df[c]=df[c].fillna((df[c].mode()))
-
-    #do some silly truncation to reduce the grain
-
-        if df[c].nunique() / df[c].count() >= .005:
-            while df[c].nunique() / df[c].count() >= .005 and df[c].map(lambda x: len(str(x))).min() > 1:
-                df[c] = df[c].str[:-1]
-
+    #establish a set of category fields 
+    #this will cast nulls to -1 and move strings to ints
     quasi_ids_cat = list()
-    quasi_ids_wo_cat = list()
 
     for c in list(df[quasi_ids]):
-        # encode as numeric for binning
-        if df[c].dtypes != np.int64:
-            df[c+'_cat'] = df[c].astype('category')
-            df[c+'_cat'] = df[c+'_cat'].cat.codes
-            df[c+'_cat'] = pd.to_numeric(df[c+'_cat'],errors = 'coerce')
-            quasi_ids_cat.append(c+'_cat')
-        else:
-            quasi_ids_wo_cat.append(c)
-    quasi_ids_w_wo_cat = quasi_ids_cat+quasi_ids_wo_cat
+        df[c+'_cat'] = df[c].astype('category')
+        df[c+'_cat'] = df[c+'_cat'].cat.codes
+        df[c+'_cat'] = pd.to_numeric(df[c+'_cat'],errors = 'coerce')
+        quasi_ids_cat.append(c+'_cat')
 
-    df_cat_mapping = df[quasi_ids_cat+quasi_ids].copy().drop_duplicates()
+    categorical = []
+    continuous = []
 
-    #get the rows that are still problematic
-    df_aggs = df.groupby(quasi_ids_w_wo_cat).size().reset_index(name="count")
-    df_slim_cats =  df_aggs[df_aggs['count']<=3] #guessing on this threshold
-
-    # for our slim qid cats, we'll employ kmeans to increase bucket size and then
-    # agg the identifiers together
-
-    # we should be more intelligent about cluster count, but I'm in a rush 
-    kmeans = KMeans(5)
-
-    kmeans.fit(df_slim_cats)
-    identified_clusters = kmeans.fit_predict(df_slim_cats)
-
-    data_with_clusters = df_slim_cats.copy()
-    data_with_clusters['Clusters'] = identified_clusters 
-
-    #grab min qid per cluster
-    #mode would be ideal, but again, low on time and haven't figured out how to make .transform() accept mode
-    #taking mins here to make sure we get "real" values for things like hectare and date
-
-    inner_join_df = pd.merge(df, data_with_clusters, on=quasi_ids_w_wo_cat, how='inner').drop(columns=['count'])
-    # df
-    # inner_join_df
-    for c in list(inner_join_df[quasi_ids_w_wo_cat]):
-        inner_join_df[c] = inner_join_df.groupby(['Clusters'])[c].transform('min')
-
-    new_df = pd.merge(df, inner_join_df, on="id", how="left")
-
-    #coalesce the clustered values, then the non-clustered ones
-    for c in fields_list:
-        if c+'_cat' in quasi_ids_cat:
-            new_df[c] = new_df[c + '_cat_y'].combine_first(new_df[c + '_cat_x'])
-        else:
-            new_df[c] = new_df[c + '_y'].combine_first(new_df[c + '_x'])
-
-    #clean up the columns
-    reduced_df = new_df[all_fields].copy()
-
-    d={}
     for c in quasi_ids_cat:
-        d[c] = dict(df_cat_mapping[[c,c.replace("_cat", "")]].drop_duplicates().to_dict('split')['data'])
-        reduced_df[c.replace("_cat", "")] = reduced_df[c.replace("_cat", "")].map(d[c])
+        col = df[c]
+        nunique = col.nunique()
+        if nunique < 20: # how hacky is this?
+            categorical.append(c)
+        else:
+            continuous.append(c)
 
-    return reduced_df
+    #just the data we need for kmeans/kmode
+    clustering_df = df[quasi_ids_cat].copy()
 
+    # Get the position of categorical columns
+    catColumnsPos = [clustering_df.columns.get_loc(col) for col in categorical]
+    dfMatrix = clustering_df.to_numpy()
+
+    #I'm sure there's a programmatic way to get to the elbow graph, but it's beyond me at the moment, so I'm picking 4 clusters
+
+    kprototype = KPrototypes(n_jobs = -1, n_clusters = 4, init = 'Huang', random_state = 0) 
+
+    kprototype.fit_predict(dfMatrix, categorical = catColumnsPos)
+    df['cluster_label'] = kprototype.labels_
+
+    #get the mode of each column by cluster
+    quasi_ids_mode = list()
+
+    for c in list(df[quasi_ids]):
+        # this is an insane syntax just to get a windowed mode. I can't believe it's not a param in .transform()
+        df[c+'_mode'] = df['cluster_label'].map(df.groupby('cluster_label')[c].agg(lambda x: x.value_counts().idxmax())) 
+        quasi_ids_mode.append(c+'_mode')
+
+    #establish clean columns 
+    quasi_ids_clean = list()
+
+    for c in list(df[quasi_ids]):
+        # this is an insane syntax just to get a windowed mode. I can't believe it's not a param in .transform()
+        # df[c+'_clean'] = df[c].combine_first(df[c+'_cat'])
+        df[c+'_clean'] = df[c].fillna('-')
+        quasi_ids_clean.append(c+'_clean')
+
+    df['n_count_of_qid']=df.groupby(quasi_ids_clean)['id'].transform('count')
+    df['risky_grain'] = df['n_count_of_qid'].apply(lambda x: True if x < 4 else False) #4 is a complete guess here, not sure what is standard for the industry. 
+
+    # #sort in desc order of unique values in the modes 
+    # #help from https://www.pythoncentral.io/how-to-sort-a-list-tuple-or-object-with-sorted-in-python/
+
+    def getKey(item):
+        return item[1]
+
+    unique_val_arr = []
+
+    for c in quasi_ids_mode:
+        unique_val_arr.append([c,df.groupby(c).size().sort_values(ascending=False).count()])
+
+    unique_val_arr = sorted(unique_val_arr, key=getKey,reverse=True)
+
+    #iterate over modes, largest to smallest
+    #replace low-grain rows with mode
+    #recount and break if we're good, if not, go through all of the qids
+
+    for arr_val in unique_val_arr:
+        c = arr_val[0]
+        df[c.replace("_mode", "_clean")] = np.where(df["risky_grain"] == True, df[c], df[c.replace("_mode", "_clean")])
+        #recount
+        df['n_count_of_qid']=df.groupby(quasi_ids_clean)['id'].transform('count')
+        df['risky_grain'] = df['n_count_of_qid'].apply(lambda x: True if x < 4 else False) #4 is a complete guess here, not sure what is standard for the industry. 
+
+        try: 
+            df.groupby('risky_grain').size()[True]
+        except:
+            break
+
+    df.drop(df[df['risky_grain'] == True].index, inplace = True)
+
+    fields_for_cleaned_df = list(set(all_fields) - set(quasi_ids)) + quasi_ids_clean
+    cleaned_df = df[fields_for_cleaned_df].copy()
+
+    for c in quasi_ids_clean:
+        cleaned_df.rename({c: c.replace("_clean", "")}, axis=1, inplace=True)
+
+    cleaned_df = cleaned_df.replace('-', np.nan)
+
+    return cleaned_df
