@@ -12,6 +12,12 @@ Learn more about the prize <a href="https://decentespresso.com/model?de1xl">here
  </tr>
 </table>
 
+## Submissions due 
+Sunday, March 27, 2022 at 11:59pm (CDT)
+
+We will announce the winner on [twitter](https://twitter.com/privacydynamics) #privacychallenge
+
+
 ## Introduction
 The objective of an anonymizer is to protect the identities of individuals in a dataset while maintaining the utility of the data as much as possible. 
 In the Privacy Challenge, your objective is to beat other contestants at maximizing privacy and utility. 
