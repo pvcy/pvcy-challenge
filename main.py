@@ -121,7 +121,7 @@ def anonymize(df, qids):
         quasi_ids_clean.append(c+'_clean')
 
     df['n_count_of_qid']=df.groupby(quasi_ids_clean)['id'].transform('count')
-    df['risky_grain'] = df['n_count_of_qid'].apply(lambda x: True if x < 4 else False) #4 is a complete guess here, not sure what is standard for the industry. 
+    df['risky_grain'] = df['n_count_of_qid'].apply(lambda x: True if x < 3 else False) #3 is a complete guess here, not sure what is standard for the industry. 
 
     # #sort in desc order of unique values in the modes 
     # #help from https://www.pythoncentral.io/how-to-sort-a-list-tuple-or-object-with-sorted-in-python/
@@ -145,7 +145,7 @@ def anonymize(df, qids):
         df[c.replace("_mode", "_clean")] = np.where(df["risky_grain"] == True, df[c], df[c.replace("_mode", "_clean")])
         #recount
         df['n_count_of_qid']=df.groupby(quasi_ids_clean)['id'].transform('count')
-        df['risky_grain'] = df['n_count_of_qid'].apply(lambda x: True if x < 4 else False) #4 is a complete guess here, not sure what is standard for the industry. 
+        df['risky_grain'] = df['n_count_of_qid'].apply(lambda x: True if x < 3 else False) #3 is a complete guess here, not sure what is standard for the industry. 
 
         try: 
             df.groupby('risky_grain').size()[True]
