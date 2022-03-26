@@ -1,5 +1,8 @@
 pytest==7.0.1
 pandas==1.4.1
+sklearn-pandas==2.2.0
+kmodes==0.11.1
+scikit-learn==1.0.2
 
 # Add any additional dependecies here.  Note that all outbound HTTP calls are not permitted and will be blocked so
 # choose dependencies accordingly.
