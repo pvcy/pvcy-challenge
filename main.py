@@ -41,8 +41,7 @@ def anonymize(df, qids):
         categorical_data, scaled_features_df, left_index=True, right_index=True
     )
     # train and fit clustering
-    # kmeans = KPrototypes(int(len(training_data)/5))
-    kmeans = KPrototypes(3)
+    kmeans = KPrototypes(int(len(training_data)/5))
 
     clusters = kmeans.fit(
         training_data,
