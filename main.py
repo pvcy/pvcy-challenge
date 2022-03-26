@@ -41,7 +41,7 @@ def anonymize(df, qids):
         categorical_data, scaled_features_df, left_index=True, right_index=True
     )
     # train and fit clustering
-    kmeans = KPrototypes(int(len(training_data)/5))
+    kmeans = KPrototypes(int(len(training_data)/20))
 
     clusters = kmeans.fit(
         training_data,
@@ -56,9 +56,9 @@ def anonymize(df, qids):
     for col in missing_cols:
         training_data[col] = df[col]
     identifiers = training_data[qids + ["label"]]
-    # group by label and get max of each group
+    # group by label and get mode of each group
     grouped_df = identifiers.groupby("label").agg(lambda x: x.value_counts().index[0])
-    # update original dataframe with new max values
+    # update original dataframe with new mode values
     training_data = training_data.apply(update_row, axis=1, args=(grouped_df, qids))
     training_data["id"] = df["id"]
     training_data.drop(columns="label", inplace=True)
