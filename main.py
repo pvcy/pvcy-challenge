@@ -132,8 +132,7 @@ def anonymize_recursive(df, qids, iteration=1):
 
 def anonymize(df, qids):
     """
-    The main implementation of your anonymization implementation.
-    Trivial anonymizer included as an example.  Replace this code with your own.
+    Implementation of iterative kd-tree clustering anonymizer.
 
     :param df: Untreated DataFrame
     :param qids: list of quasi-identifier columns
