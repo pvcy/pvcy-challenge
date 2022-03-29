@@ -34,6 +34,6 @@ jobs:
       - name: Reset Dyno Type
         run: "heroku ps:type standard-1x --app pvcy-challenge-${{ github.run_id }}"
       - name: Run Submitted Scoring Module
-        run: "heroku run --size=standard-2x worker --app pvcy-challenge-${{ github.run_id }}"
+        run: "heroku run --size=performance-m worker --app pvcy-challenge-${{ github.run_id }}"
       - name: Destory Heroku App
         run: "heroku apps:destroy pvcy-challenge-${{ github.run_id }} --confirm pvcy-challenge-${{ github.run_id }}"
