@@ -31,6 +31,8 @@ jobs:
           HD_BRANCH_NAME: ${{ steps.vars.outputs.short_ref }}
           HD_GITHUB_RUN_ID: ${{ github.run_id }}
           HD_GH_PA_TOKEN: ${{secrets.GH_PA_TOKEN}}
+      - name: Reset Dyno Type
+        run: "heroku ps:type standard-1x --app pvcy-challenge-${{ github.run_id }}"
       - name: Run Submitted Scoring Module
         run: "heroku run --size=standard-2x worker --app pvcy-challenge-${{ github.run_id }}"
       - name: Destory Heroku App
