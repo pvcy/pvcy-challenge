@@ -38,3 +38,4 @@ nosetests.xml
 /requirements-private.txt
 /venv
 /Makefile
+/data/pvcy*

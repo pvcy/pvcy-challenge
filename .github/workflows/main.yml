@@ -25,6 +25,7 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "pvcy-challenge-${{ github.run_id }}"
           heroku_email: "craig@privacydynamics.io"
+          team: "privacy-dynamics"
         env:
           HD_PVCY_CHALLENGE_SERVICE_DOMAIN: ${{secrets.PVCY_CHALLENGE_SERVICE_DOMAIN}}
           HD_USER_NAME: ${{ github.event.pull_request.user.login }}
