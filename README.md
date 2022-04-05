@@ -12,11 +12,8 @@ Learn more about the prize <a href="https://decentespresso.com/model?de1xl">here
  </tr>
 </table>
 
-## Submissions due 
-Sunday, March 27, 2022 at 11:59pm (CDT)
-
-We will announce the winner on [twitter](https://twitter.com/privacydynamics) #privacychallenge
-
+## Submission Deadline 
+The challenge was originally scheduled to be confined to the week around Data Council (March 23-27). After reivewing the initial submissions, we acknowledge the task was more difficult than we anticipated for those participating and are working to establish well defined requirements of a successful submission. After publishing more detailed requirements for a successful submission, the espresso machine will be awarded to the first person to submit a successul project. Watch the repo for updates. 
 
 ## Introduction
 The objective of an anonymizer is to protect the identities of individuals in a dataset while maintaining the utility of the data as much as possible. 
