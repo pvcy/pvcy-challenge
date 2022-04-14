@@ -1,5 +1,3 @@
-pytest==7.0.1
-pandas==1.4.1
-
-# Add any additional dependecies here.  Note that all outbound HTTP calls are not permitted and will be blocked so
-# choose dependencies accordingly.
+pytest==7.1.1
+pandas==1.3.5
+scipy==1.7.3
