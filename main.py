@@ -139,8 +139,11 @@ def anonymize(df, qids):
     :return: A valid Pandas DataFrame with your anonymized data
     """
 
-    # Make top-level recursive call
-    anon_df = anonymize_recursive(df, qids)
+    try:
+        # Make top-level recursive call
+        anon_df = anonymize_recursive(df, qids)
+    except Exception as e:
+        print(repr(e))
 
     print("\n\nOverall Anonymity Metrics:")
     print_anonymity_metrics(anon_df, qids)
